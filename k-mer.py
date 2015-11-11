@@ -2,7 +2,7 @@
 from sys import argv, exit
 
 text = argv[1]
-debug = int(argv[2]) //flag to debug
+debug = int(argv[2]) #flag to debug
 
 def  parsing_text(pos,k,text):
     
@@ -34,4 +34,4 @@ def count_sub_string(pos,k,sub_string, text, counting):
 
     return count_sub_string(pos+1,k,sub_string,text,counting)
 
-parsing_text(0,1,text)
+parsing_text(0,2,text)
