@@ -2,36 +2,38 @@
 from sys import argv, exit
 
 text = argv[1]
-debug = int(argv[2]) #flag to debug
+k = int(argv[2])
+
+len_text = len(text)
+counting = dict()
 
 def  parsing_text(pos,k,text):
     
-    sub_string = text[pos:k]
+    sub_string = text[pos:pos+k]
 
-    counting = dict()
-
-    counting[sub_string] = 0
-
-    print count_sub_string(pos, k, sub_string, text,counting)
-
-    return 
-
-def count_sub_string(pos,k,sub_string, text, counting):
-    
     len_sub_string = len(sub_string)
 
-    if pos+len_sub_string == len(text)+1:
-        if debug == 1:
-            print "end"
-        return counting
+    if pos+len_sub_string > len_text or len_sub_string < k:
+        return
 
-    if debug == 1:
-        print "pos,k : ", pos,",",pos+k
-        print "val: ",text[pos:pos+k]
+    if sub_string not in counting:
+
+        counting[sub_string] = 0
+
+        count_sub_string(pos, k, sub_string, len_sub_string, text,counting)
+
+    return parsing_text(pos+1,k,text)
+
+def count_sub_string(pos,k,sub_string,len_sub_string, text, counting):
+
+    if pos+len_sub_string > len_text:
+        return
 
     if sub_string == text[pos:pos+k]:
         counting[sub_string] += 1 
 
-    return count_sub_string(pos+1,k,sub_string,text,counting)
+    return count_sub_string(pos+1,k,sub_string, len_sub_string,text,counting)
 
-parsing_text(0,2,text)
+parsing_text(0,k,text)
+
+print "dict counting: ", counting
