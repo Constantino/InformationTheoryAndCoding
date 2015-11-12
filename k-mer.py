@@ -2,7 +2,7 @@
 from sys import argv, exit
 
 text = argv[1]
-k = int(argv[2])
+ks = int(argv[2])
 
 len_text = len(text)
 counting = dict()
@@ -34,6 +34,11 @@ def count_sub_string(pos,k,sub_string,len_sub_string, text, counting):
 
     return count_sub_string(pos+1,k,sub_string, len_sub_string,text,counting)
 
-parsing_text(0,k,text)
+
+for k in range(1,len_text+1):
+    print "k: ",k
+    parsing_text(0,k,text)
+    print counting
+
 
 print "dict counting: ", counting
