@@ -10,11 +10,12 @@ except:
 string_length = len(string)
 
 def get_kmers(string, k):
-	kmers = list()
-	for pos in xrange(0, string_length-1):
-		kmers.append(string[pos:pos+k])
-	return kmers
+    kmers = list()
+    for pos in xrange(0, string_length-k+1):
+        kmers.append(string[pos:pos+k])
+    return kmers
 
 kmers = get_kmers(string, k)
 frequencies = [string.count(kmer) for kmer in kmers]
 print kmers, frequencies
+
