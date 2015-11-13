@@ -1,7 +1,9 @@
 #!/usr/bin/python2                                                                                                                      
 from sys import argv, exit
+import random
 
 text = argv[1]
+error_prob = float(argv[2])
 
 len_text = len(text)
 counting = dict()
@@ -49,6 +51,26 @@ def find_kmer_most_frequent():
 
     print "k_mer_most_freq: ",k_mer_most_freq
 
+def disturb_string(string, prob):
+    new_string = ""
+    for e in string:
+        x = random.randrange(10)/10.0
+        if prob >= x:
+            new_string += chr(ord(e)+int(x*10))
+        else:
+            new_string += e
+    return new_string
+
+def boyer_moore(original_string, new_string):
+    for i in range(len(original_string),0,-1):
+        if original_string[i-1] != new_string[i-1]:
+            print "**Boyer-Moore decoupling: "
+            print "original_string[",i-1,"]: ",original_string[i-1]
+            print "new_string[",i-1,"]: ",new_string[i-1]
+            return 1
+    return 0
+
+
 still_continue = True
 k = 1
 while (still_continue and k < len_text):
@@ -71,6 +93,9 @@ while (still_continue and k < len_text):
 #print "dict counting: ", counting
 
 find_kmer_most_frequent()
+
+if boyer_moore(k_mer_most_freq["e"],disturb_string(k_mer_most_freq["e"],error_prob)) == 0:
+    print "**Boyer-Moore decoupling: Passed"
 
 
 
