@@ -26,10 +26,10 @@ def compare(frequencies, huffman_code, shannon_code, shannon_fano_code):
         print "{:<6} {:<12} {:<10} {:<15} {:<10}".format(x, frequencies[x], shannon_code[x], shannon_fano_code[x], huffman_code[x])
 
     print
-    print "{:<14} {:<20} {:<18}".format('Coding method', 'Avg codeword length', 'Compression Ratio')
-    print "{:<14} {:<20} {:<.5f}".format('Huffman', huffman_avg_cw_length, huffman_compression_ratio)
-    print "{:<14} {:<20} {:<.5f}".format('Shannon', shannon_avg_cw_length, shannon_compression_ratio)
-    print "{:<14} {:<20} {:<.5f}".format('Shannon Fano', shannon_fano_avg_cw_length, shannon_fano_compression_ratio)
+    print "{:<14} {:<25} {:<18}".format('Coding method', 'Avg codeword length (b/s)', 'Compression Ratio')
+    print "{:<14} {:^25} {:.5f}".format('Huffman', huffman_avg_cw_length, huffman_compression_ratio)
+    print "{:<14} {:^25} {:.5f}".format('Shannon', shannon_avg_cw_length, shannon_compression_ratio)
+    print "{:<14} {:^25} {:.5f}".format('Shannon Fano', shannon_fano_avg_cw_length, shannon_fano_compression_ratio)
     print
 
 if __name__=="__main__":
