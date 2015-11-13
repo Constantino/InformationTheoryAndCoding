@@ -64,12 +64,23 @@ def disturb_string(string, prob):
 def boyer_moore(original_string, new_string):
     for i in range(len(original_string),0,-1):
         if original_string[i-1] != new_string[i-1]:
-            print "**Boyer-Moore decoupling: "
+            print "**Boyer-Moore coupling method: "
             print "original_string[",i-1,"]: ",original_string[i-1]
             print "new_string[",i-1,"]: ",new_string[i-1]
+            print "**"
             return 1
     return 0
 
+def knuth_morris_pratt(original_string, new_string, pattern):
+    len_pattern = len(pattern)
+    for i in range(len(original_string)-len_pattern):
+        if original_string[i:len_pattern] != new_string[i:len_pattern]:
+            print "**knuth_morris_pratt coupling method: "
+            print "original_string[",i,":",len_pattern,"]: ",original_string[i:len_pattern]
+            print "new_string[",i,":",len_pattern,"]: ",new_string[i:len_pattern]
+            print "**"
+            return 1
+    return 0
 
 still_continue = True
 k = 1
@@ -94,8 +105,14 @@ while (still_continue and k < len_text):
 
 find_kmer_most_frequent()
 
-if boyer_moore(k_mer_most_freq["e"],disturb_string(k_mer_most_freq["e"],error_prob)) == 0:
-    print "**Boyer-Moore decoupling: Passed"
+new_string = disturb_string(text,error_prob)
 
+print "original string: ",text
+print "new string: ",new_string
 
+if boyer_moore(text, new_string) == 0:
+    print "**Boyer-Moore coupling method: Passed"
+
+if knuth_morris_pratt(text,new_string,k_mer_most_freq["e"]) == 0:
+    print "** Knuth Morris Pratt coupling method: Passed"    
 
