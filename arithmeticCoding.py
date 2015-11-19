@@ -4,21 +4,15 @@ from collections import Counter, OrderedDict
 
 def compute_ranges(probabilities):
 	keys = probabilities.keys()
-	print keys
-	first_range = (keys[0], (0.0, probabilities[keys[0]]))
-	ranges = list()
-	ranges.append(first_range)
+	ranges = dict()
+	ranges[keys[0]] = (0.0, probabilities[keys[0]])
 	accumulated = probabilities[keys[0]]
-	internal_ranges = list()
 	for i in range(len(keys))[1:-1]:
-		internal_ranges.append((keys[i], (accumulated, accumulated+probabilities[keys[i]])))
+		ranges[keys[i]] = (accumulated, accumulated+probabilities[keys[i]])
 		accumulated += probabilities[keys[i]]
-	ranges.extend(internal_ranges)
-	#ranges.extend([(keys[i], (probabilities[keys[i-1]], probabilities[keys[i]])) for i in range(len(keys))[1:-1]])
-	last_range = (keys[-1], (accumulated, 1.0))
-	ranges.append(last_range)
+	ranges[keys[-1]] = (accumulated, 1.0)
 	print ranges
-	return ranges
+	return ranges	
 
 def arithmeticCoding(probabilities, word):
 	encoded = ""
