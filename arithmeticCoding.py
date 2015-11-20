@@ -24,16 +24,30 @@ def arithmeticCoding(probabilities, word):
         low = low + rang*ranges[symbol][0]
     return (high+low)/2
 
+def binary_expansion(word, binary):
+    word = word*2
+    if word > 1:
+        return binary_expansion(word - 1, binary + '1')
+    elif word < 1:
+        return binary_expansion(word, binary + '0')
+    else:
+        binary += '1'
+        return binary
+
+
 if __name__=='__main__':
     try:
         string = argv[1]
     except:
-        #string = "no llores la muerte de tu cuerpo ni llores la muerte de tu alma."
-        string = "alaladoaroloro" # String for testing purposes
+        string = "no llores la muerte de tu cuerpo ni llores la muerte de tu alma."
+        #string = "alaladoaroloro" # String for testing purposes
 
     frequencies = Counter(string)
+    for f in frequencies:
+        print f, frequencies[f]
     probability = {s : float(frequencies[s]) / len(string) for s in frequencies}
 
     word = 'al' # Word to be encoded for testing
     encoded = arithmeticCoding(probability, word)
     print word + " =", encoded
+    print binary_expansion(encoded, '')
