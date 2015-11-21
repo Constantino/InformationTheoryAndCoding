@@ -15,29 +15,74 @@ def compute_ranges(probabilities):
     print "Ranges", ranges
     return ranges   
 
-def arithmeticCoding(probabilities, word):
-    high = 1.0
-    low = 0.0
-    ranges = compute_ranges(probabilities)
+def get_word_intervals(word, probabilities):
+
+    first_ranges = compute_ranges(probabilities)
+
+    first_character_ranges = ranges[word[0]]
+
+
+
+    return intervals
+
+def process_word_ranges(ranges, alphabet, character):
+
+    interval = ranges[character]
+    print " ... interval: ",interval
+    new_ranges = dict()
+
+    for c in alphabet:
+        if c == alphabet[0]:
+            new_ranges[c] = [interval[0],interval[0]+ranges[c][1]*interval[1]]
+        elif c == alphabet[-1]:
+            new_ranges[c] = [ranges[c][0]*interval[1],interval[1]]
+        else:
+            new_ranges[c] = [ranges[c][0]*interval[1],ranges[c][1]*interval[1]]
+
+    #print new_ranges
+
+    return new_ranges
+
+def get_ranges(probabilities,alphabet):
+
+    ranges = dict()
+    freq_ac = 0
+    for e in alphabet:
+        ranges[e] = [freq_ac,probabilities[e]+freq_ac]
+        freq_ac = probabilities[e]+freq_ac
+
+    return ranges
+
+def arithmeticCoding(probabilities, word,alphabet):
+
+    #ranges = compute_ranges(probabilities)
+    ranges = get_ranges(probabilities,alphabet)
+
+    
+    for symbol in word:
+        print "symbol: ", symbol, " __ ",ranges[symbol]
+    
+
+    print "****"
+
+    my_ranges = ranges
+    for c in word[:-1]:
+        print "character: ",c
+        my_ranges = process_word_ranges(my_ranges, alphabet, c)
+
+        print "my_new_ranges: ",my_ranges
+    print "****"
 
     #Testing
-    t = find_t(.0612)
-    x = find_x(0.1020,0.1632,t)
-    r = find_r(x,t)
-    
+    l = my_ranges['l'][1] - my_ranges['l'][0]
+    t = find_t(l)
     print "t: ",t
+    x = find_x(my_ranges['l'][0],my_ranges['l'][1],t)
     print "x: ",x
+    r = find_r(x,t)
     print "r: ",r
     
     return r
-    
-    """
-    for symbol in word:
-        rang = high - low
-        high = low + rang*ranges[symbol][1]
-        low = low + rang*ranges[symbol][0]
-    return (high+low)/2
-    """
 
 #Method 1
 def find_t(l):
@@ -51,16 +96,17 @@ def find_x(alfa, beta, t):
     den = pow(2,t)
     alfa *= den
     beta *= den
-
+    print "alfa: ",alfa," -- beta: ",beta
     integers = []
 
     for e in range(int(ceil(alfa)),int(ceil(beta))):
         integers.append(e)
 
-    for e in integers:
-        if e%2 == 0:
-            return e
-    return 
+    if len(integers) > 1:
+        for e in integers:
+            if e%2 == 0:
+                return e
+    return integers[0]
 
 def find_r(x,t):
     return x/pow(2,t)
@@ -81,14 +127,35 @@ if __name__=='__main__':
         string = argv[1]
     except:
         #string = "no llores la muerte de tu cuerpo ni llores la muerte de tu alma."
-        string = "alaladoaroloro" # String for testing purposes
+        string = "nolloreslamuertedetucuerponilloreslamuertedetualma"
+        #string = "alaladoaroloro" # String for testing purposes
 
+    print "string len: ",len(string)
     frequencies = Counter(string)
-    for f in frequencies:
-        print f, frequencies[f]
-    probability = {s : float(frequencies[s]) / len(string) for s in frequencies}
+    frequencies = sorted(frequencies.items())
+    print "frequencies_s: ",frequencies
 
-    word = 'al' # Word to be encoded for testing
-    encoded = arithmeticCoding(probability, word)
-    print word + " =", encoded
-    print binary_expansion(encoded, '')
+    alphabet = []
+    for key,value in frequencies:
+        #print key,value
+        alphabet.append(key)
+    probability = {key : float(value) / len(string) for key,value in frequencies}
+
+    #print "my ranges: ",get_ranges(probability,alphabet)
+
+    print "probability: ", probability
+
+    #word = 'alo' # Word to be encoded for testing
+    words = ['no', 'llores', 'la', 'muerte', 'de', 'tu', 'cuerpo', 'ni', 'llores', 'la', 'muerte', 'de', 'tu', 'alma']
+    coding = dict()
+    for word in words:
+        #word = "llores"
+        encoded = arithmeticCoding(probability, word,alphabet)
+        print word + " =", encoded
+        #print binary_expansion(encoded, '')
+        coding[word] = binary_expansion(encoded, '')
+
+    print "**** CODING: ",coding
+
+
+
